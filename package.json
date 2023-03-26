@@ -1,0 +1,21 @@
+{
+  "name": "encode-img",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "concurrently \"tsc -w\" \"nodemon dir/\"",
+    "start": "node dir/",
+    "build": "tsc && npx pkg -t node16-win-x64 dir/index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "concurrently": "^7.6.0",
+    "dotenv": "^16.0.3",
+    "pkg": "^5.8.1"
+  },
+  "devDependencies": {
+    "@types/node": "^18.15.9"
+  }
+}
