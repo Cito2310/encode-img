@@ -1,12 +1,15 @@
 {
   "name": "encode-img",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "concurrently \"tsc -w\" \"nodemon dir/\"",
+    "dev": "concurrently \"tsc -w\" \"nodemon dir/dev\"",
     "start": "node dir/",
-    "build": "tsc && npx pkg -t node16-win-x64 dir/index.js"
+    "build": "tsc && npx pkg -t node16-win-x64 dir/index.js",
+    "update-major": "npm version --force --no-git-tag-version major",
+    "update-minor": "npm version --force --no-git-tag-version minor",
+    "update-patch": "npm version --force --no-git-tag-version patch"
   },
   "author": "",
   "license": "ISC",
