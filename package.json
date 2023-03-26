@@ -1,7 +1,7 @@
 {
   "homepage": "./",
   "name": "encode-img",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "author": "",
   "description": "",
   "keywords": [
@@ -19,7 +19,8 @@
     "@types/react-dom": "^18.0.10",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-scripts": "^5.0.1"
+    "react-scripts": "^5.0.1",
+    "sass": "^1.60.0"
   },
   "scripts": {
     "dev": "concurrently \"cross-env BROWSER=none react-scripts start\" \"wait-on http://127.0.0.1:3000 && tsc -p electron -w\" \"wait-on http://127.0.0.1:3000 && tsc -p electron && electron .\"",
