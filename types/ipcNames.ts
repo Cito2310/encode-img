@@ -1,4 +1,5 @@
 export type ipcNames = 
     "getRouteImg" |
     "saveDataEncrypt" |
-    "initProgram"
+    "initProgram" |
+    "getConfig"

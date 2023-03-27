@@ -1,8 +1,12 @@
 import { useForm } from '../hooks/useForm';
+import { IObjectConfig } from '../../types/objectConfig';
 
-// TODO crear archivo config añadir un hash con la contraseña
+interface props {
+    setConfig: React.Dispatch<React.SetStateAction<IObjectConfig>>
+}
 
-export const ScreenInit = () => {
+
+export const ScreenInit = ({ setConfig }: props) => {
     const {
         password,
         onInputChange
@@ -13,7 +17,7 @@ export const ScreenInit = () => {
     const onSubmitPassword = async(event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         const data = await window.electronAPI.initProgram(password);
-        console.log(data);
+        setConfig(data);
     }
 
     return (

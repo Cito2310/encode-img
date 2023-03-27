@@ -8,4 +8,5 @@ contextBridge.exposeInMainWorld('electronAPI', {
     getRouteImg: () => ipcRenderer.invoke("getRouteImg" as ipcNames),
     saveDataEncrypt: ( password: string ) => ipcRenderer.invoke("saveDataEncrypt" as ipcNames, password),
     initProgram: ( password: string ) => ipcRenderer.invoke("initProgram" as ipcNames, password),
+    getConfig: () => ipcRenderer.invoke("getConfig" as ipcNames),
 })

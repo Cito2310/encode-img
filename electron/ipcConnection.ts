@@ -2,7 +2,8 @@ import { dialog, ipcMain } from 'electron';
 import * as bcryptjs from "bcryptjs";
 
 import { ipcNames } from '../types/ipcNames';
-import { mkdirSync, writeFileSync } from 'fs';
+import { mkdirSync, writeFileSync, readFileSync } from 'fs';
+import { IObjectConfig } from '../types/objectConfig';
 
 export const ipConnection = () => {
 
@@ -43,5 +44,18 @@ export const ipConnection = () => {
         writeFileSync( "./data/data.json", JSON.stringify(data));
 
         return data;
+    })
+
+    ipcMain.handle("getConfig" as ipcNames, async(e, args ): Promise<undefined | IObjectConfig> =>{
+        try {
+            
+            const raw = readFileSync("./data/data.json", { encoding: "utf-8" });
+            const data = JSON.parse(raw);
+            return data;
+
+        } catch (error) {
+
+            return undefined;
+        }
     })
 }

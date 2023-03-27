@@ -1,5 +1,12 @@
 import { useForm } from '../hooks/useForm';
-export const ScreenRegister = () => {
+
+interface props {
+    onLogin: (event: React.FormEvent<HTMLFormElement>, newPassword: string) => void
+    errorLogin: string
+}
+
+
+export const ScreenRegister = ({ onLogin, errorLogin }: props) => {
     const {
         password,
         onInputChange
@@ -7,24 +14,26 @@ export const ScreenRegister = () => {
         password: ""        
     })
 
-    // TODO Modificar estado login, guardar passwrod
-
     return (
         <div className="m-3 bg-dark text-white rounded p-4">
             <h1>Iniciar Sesion</h1>
-            <label className="form-label">Contraseña</label>
-            <input 
-                value={password} 
-                onChange={onInputChange} 
-                name="password"
-                type="password" 
-                className="form-control" 
-                placeholder="Ingrese una contraseña"
-            />
 
-            <div className='d-flex p-0 mt-3 justify-content-end'>
-                <button type='button' className='btn btn-light'>Aceptar</button>
-            </div>
+            <form onSubmit={event => onLogin(event, password) }>
+                <label className="form-label">Contraseña</label>
+                <input 
+                    value={password} 
+                    onChange={onInputChange} 
+                    name="password"
+                    type="password" 
+                    className="form-control" 
+                    placeholder="Ingrese una contraseña"
+                />
+
+                <div className='d-flex p-0 mt-3 justify-content-end gap-3 align-items-center'>
+                    <p className='d-flex my-auto'>{errorLogin}</p>
+                    <input type='submit' className='btn btn-light' value="Aceptar"/>
+                </div>
+            </form>
         </div>
     )
 }
