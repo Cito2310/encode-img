@@ -10,22 +10,30 @@ export const ScreenInit = () => {
         password: ""
     });
 
+    const onSubmitPassword = async(event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        const data = await window.electronAPI.initProgram(password);
+        console.log(data);
+    }
+
     return (
         <div className="m-3">
             <h1>Registro inicial</h1>
-            <label className="form-label">Contraseña</label>
-            <input 
-                value={password} 
-                onChange={onInputChange} 
-                name="password"
-                type="password" 
-                className="form-control" 
-                placeholder="Ingrese una contraseña"
-            />
+            <form onSubmit={onSubmitPassword}>
+                <label className="form-label">Contraseña</label>
+                <input 
+                    value={password} 
+                    onChange={onInputChange} 
+                    name="password"
+                    type="password" 
+                    className="form-control" 
+                    placeholder="Ingrese una contraseña"
+                />
 
-            <div className='d-flex p-0 mt-3 justify-content-end'>
-                <button type='button' className='btn btn-primary'>Aceptar</button>
-            </div>
+                <div className='d-flex p-0 mt-3 justify-content-end'>
+                    <input disabled={password.trim() ? false : true} type='submit' className='btn btn-primary' value="Aceptar"></input>
+                </div>
+            </form>
         </div>
     )
 }

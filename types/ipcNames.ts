@@ -1,3 +1,4 @@
 export type ipcNames = 
-    // "basic-on-ipc" |
-    "getRouteImg" 
+    "getRouteImg" |
+    "saveDataEncrypt" |
+    "initProgram"
