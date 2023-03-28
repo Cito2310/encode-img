@@ -1,12 +1,15 @@
 import { useForm } from '../hooks/useForm';
 import { useState } from 'react';
 
-export const ModalEncryptImg = () => {
+interface props {
+    password: string
+}
+
+export const ModalEncryptImg = ({password}: props) => {
     const {
         name,
         pathFile,
         uniquePassword,
-        format,
 
         onInputChange,
         setFormState,
@@ -21,6 +24,9 @@ export const ModalEncryptImg = () => {
     const [stateUniquePassword, setStateUniquePassword] = useState(false);
 
     const toggleStateUniquePassword = () => {
+        let copyForm = {...formState};
+        copyForm.uniquePassword = "";
+        setFormState(copyForm);
         setStateUniquePassword(!stateUniquePassword);
     }
 
@@ -44,8 +50,7 @@ export const ModalEncryptImg = () => {
     }
 
     const onSaveDataEncrypt = async() => {
-        const data = await window.electronAPI.saveDataEncrypt("hola");
-        console.log(data);
+        await window.electronAPI.encodeImg(pathFile, name, password, uniquePassword);
     }
 
     // TODO AÑADIR FUNCION BUSCAR ARCHIVO CONEXION CON ELECTRON

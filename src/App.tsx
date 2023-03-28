@@ -10,6 +10,7 @@ import { useEffect, useLayoutEffect, useState } from 'react';
 import axios from 'axios';
 import { IObjectConfig } from '../types/objectConfig';
 import * as bcryptjs from 'bcryptjs';
+import { IObjectEncryptsNotCode } from '../types/objectEncrypts';
 
 
 function App() {
@@ -33,6 +34,9 @@ function App() {
     setErrorLogin("Contraseña invalida");
   }
 
+  // SELECT FILE
+  const [selectFile, setSelectFile] = useState<IObjectEncryptsNotCode>({} as IObjectEncryptsNotCode)
+
 
 
   return (
@@ -46,13 +50,13 @@ function App() {
             {
               !password 
               ? <ScreenRegister errorLogin={errorLogin} onLogin={onLogin}/>
-              : <ScreenFiles/>
+              : <ScreenFiles setSelectFile={setSelectFile}/>
             }
           </>
         }
 
-        <ModalDecryptImg/>
-        <ModalEncryptImg/>
+        <ModalDecryptImg selectFile={selectFile} password={password}/>
+        <ModalEncryptImg password={password}/>
 
       </div>
     </div>

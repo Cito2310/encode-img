@@ -1,8 +1,21 @@
-export const ScreenFiles = () => {
+import { useEffect, useState } from 'react';
+import { IObjectEncryptsNotCode } from '../../types/objectEncrypts';
 
-    // TODO OBTENER ELEMENTOS ENCRIPTADOS Y MOSTRARLO
+interface props {
+    setSelectFile: React.Dispatch<React.SetStateAction<IObjectEncryptsNotCode>>
+}
+
+export const ScreenFiles = ({ setSelectFile }: props) => {
+
+    // OBTENER ELEMENTOS ENCRIPTADOS Y MOSTRARLO
+    const [encryptFiles, setEncryptFiles] = useState<IObjectEncryptsNotCode[]>([])
+    useEffect(() => {window.electronAPI.getEncryptImg().then(setEncryptFiles)}, [])
+    
 
     // TODO EL BOTON DESENCRIPTAR DEBE ENVIAR LA DATA AL MODAL DE DESENCRIPTADO
+    const onCallDesencrypt = ( file: IObjectEncryptsNotCode ) => {
+        setSelectFile(file)
+    }
     
     return (
         <div className="m-3">
@@ -13,14 +26,16 @@ export const ScreenFiles = () => {
                 </button>
             </div>
 
-            <div className="d-flex flex-column gap-2 px-3">
-                <div className="d-flex justify-content-between align-items-center">
-                    <h4>Imagen 1</h4>
-                    <button type="button" className="ms-3 btn btn-dark" data-bs-toggle="modal" data-bs-target="#decryptModal">
-                        Desencriptar
-                    </button>
-                </div>
-            </div>
+            <ul className="d-flex flex-column gap-2 px-3">
+                {
+                    encryptFiles.map( fileData => <li key={fileData.name} className='d-flex justify-content-between align-items-center'>
+                        <h4>{ fileData.name }</h4>
+                        <button onClick={()=>{onCallDesencrypt(fileData)}} type="button" className="ms-3 btn btn-dark" data-bs-toggle="modal" data-bs-target="#decryptModal">
+                            Desencriptar
+                        </button>
+                    </li>)
+                }
+            </ul>
         </div>
     )
 }

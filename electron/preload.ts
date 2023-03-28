@@ -3,10 +3,10 @@ import { ipcNames } from "../types/ipcNames"
 const { contextBridge, ipcRenderer } = require('electron')
 
 contextBridge.exposeInMainWorld('electronAPI', {
-    // basicOnIpc: ( value: string ) => ipcRenderer.send('basic-on-ipc' as ipcNames, value),
-    // basicHandleIpc: ( value: string ) => ipcRenderer.invoke('basic-handle-ipc' as ipcNames, value)
+    encodeImg: (route: string, name: string, password: string, specialPassword?: string) => ipcRenderer.send('encodeImg' as ipcNames, { route, name, password, specialPassword }),
+    desencryptImg: (name: string, password: string) => ipcRenderer.send('desencryptImg' as ipcNames, { name, password }),
     getRouteImg: () => ipcRenderer.invoke("getRouteImg" as ipcNames),
-    saveDataEncrypt: ( password: string ) => ipcRenderer.invoke("saveDataEncrypt" as ipcNames, password),
     initProgram: ( password: string ) => ipcRenderer.invoke("initProgram" as ipcNames, password),
     getConfig: () => ipcRenderer.invoke("getConfig" as ipcNames),
+    getEncryptImg: () => ipcRenderer.invoke("getEncryptImg" as ipcNames),
 })
