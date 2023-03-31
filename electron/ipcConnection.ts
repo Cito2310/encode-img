@@ -35,7 +35,35 @@ export const ipConnection = () => {
         return data;
     })
 
-    ipcMain.on("encodeImg" as ipcNames, async(e, args ): Promise<void> =>{
+    ipcMain.handle("getConfig" as ipcNames, async(e, args ): Promise<IObjectConfig | undefined> =>{
+        try {
+            const rawData = readFileSync("./data/data.json", {encoding: "utf-8"});
+            const parseData = JSON.parse(rawData);
+            return parseData;
+            
+        } catch (error) {
+            return undefined;
+        }
+    })
+
+
+    // FUNCTION ENCRYPT AND DESCRYPT
+    ipcMain.handle("getEncryptsImgs" as ipcNames, async(e, args ): Promise<IObjectEncryptsNotCode[]> =>{
+        const files = readdirSync("./data/encode");
+
+        const rawData: IObjectEncrypts[] = files.map( value => JSON.parse(readFileSync(`./data/encode/${value}`, "utf-8")));
+
+        const dataWithNotCode = rawData.map( value => ({
+            extension: value.extension,
+            name: value.name,
+            password: value.password,
+            specialPassword: value.specialPassword
+        }))
+
+        return dataWithNotCode;
+    })
+
+    ipcMain.on("encryptImg" as ipcNames, async(e, args ): Promise<void> =>{
         const { name, route,  password, specialPassword } = args as { route: string, name: string, password: string, specialPassword?: string };
 
         // GET BASIC DATA
@@ -72,32 +100,6 @@ export const ipConnection = () => {
         if (!existsSync("./data/encode")) mkdirSync("./data/encode", {recursive: true});
 
         writeFileSync(`./data/encode/${copyName}.json`, JSON.stringify(objectEncode));
-    })
-
-    ipcMain.handle("getConfig" as ipcNames, async(e, args ): Promise<IObjectConfig | undefined> =>{
-        try {
-            const rawData = readFileSync("./data/data.json", {encoding: "utf-8"});
-            const parseData = JSON.parse(rawData);
-            return parseData;
-            
-        } catch (error) {
-            return undefined;
-        }
-    })
-
-    ipcMain.handle("getEncryptImg" as ipcNames, async(e, args ): Promise<IObjectEncryptsNotCode[]> =>{
-        const files = readdirSync("./data/encode");
-
-        const rawData: IObjectEncrypts[] = files.map( value => JSON.parse(readFileSync(`./data/encode/${value}`, "utf-8")));
-
-        const dataWithNotCode = rawData.map( value => ({
-            extension: value.extension,
-            name: value.name,
-            password: value.password,
-            specialPassword: value.specialPassword
-        }))
-
-        return dataWithNotCode;
     })
 
     ipcMain.on("desencryptImg" as ipcNames, async(e, args): Promise<void> => {

@@ -50,7 +50,7 @@ export const ModalEncryptImg = ({password}: props) => {
     }
 
     const onSaveDataEncrypt = async() => {
-        await window.electronAPI.encodeImg(pathFile, name, password, uniquePassword);
+        await window.electronAPI.encryptImg(pathFile, name, password, uniquePassword);
     }
 
     // TODO AÑADIR FUNCION BUSCAR ARCHIVO CONEXION CON ELECTRON

@@ -2,6 +2,7 @@ export type ipcNames =
     "getRouteImg" |
     "initProgram" |
     "getConfig" |
-    "encodeImg" |
-    "getEncryptImg" |
+
+    "getEncryptsImgs" |
+    "encryptImg" |
     "desencryptImg"

@@ -9,7 +9,7 @@ export const ScreenFiles = ({ setSelectFile }: props) => {
 
     // OBTENER ELEMENTOS ENCRIPTADOS Y MOSTRARLO
     const [encryptFiles, setEncryptFiles] = useState<IObjectEncryptsNotCode[]>([])
-    useEffect(() => {window.electronAPI.getEncryptImg().then(setEncryptFiles)}, [])
+    useEffect(() => {window.electronAPI.getEncryptsImgs().then(setEncryptFiles)}, [])
     
 
     // TODO EL BOTON DESENCRIPTAR DEBE ENVIAR LA DATA AL MODAL DE DESENCRIPTADO
