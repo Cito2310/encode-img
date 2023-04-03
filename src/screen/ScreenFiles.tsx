@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
 import { IObjectEncryptsNotCode } from '../../types/objectEncrypts';
 
-import "../styles/screen-files.scss"
 import { Button } from '../components/Button';
 import { ModalEncryptImg } from '../components/ModalEncryptImg';
 import { ModalDecryptImg } from '../components/ModalDecryptImg';
+
+import "../styles/screen-files.scss"
 
 interface props {
     password: string
@@ -52,7 +53,7 @@ export const ScreenFiles = ({password}: props) => {
                 }
             </ul>
 
-            {currentModal === "encrypt" && <ModalEncryptImg password={password}/>}
+            {currentModal === "encrypt" && <ModalEncryptImg password={password} onExit={onExitModal}/>}
             {currentModal === "decrypt" && <ModalDecryptImg password={password} selectFile={selectFile}/>}
         </div>
     )

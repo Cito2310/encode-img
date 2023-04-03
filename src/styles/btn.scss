@@ -56,6 +56,24 @@
                         color:              #dad7d7;       }
     }
 
+    &.alert {
+        background-color: #D71F1F;
+        color: #fff;
+        border-color: #D71F1F;
+
+        &:hover {   background-color:   #AE1818; 
+                    border-color:       #AE1818;    
+                    color:              #f0f0f0;           }
+
+        &:active {  background-color:   #960D0D;
+                    border-color:       #960D0D;    
+                    color:              #f0f0f0;        }
+
+        &:disabled {    background-color:   #FFFFFF;
+                        border-color:       #DADBDF;    
+                        color:              #dad7d7;       }
+    }
+
     .animationRotation360 {
         animation: rotation360 infinite linear 1.6s;
     }

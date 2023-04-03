@@ -1,11 +1,16 @@
-import { useForm } from '../hooks/useForm';
 import { useState } from 'react';
+import { ModalParent } from './ModalParent';
+import { InputText } from './Inputs';
+import { Button } from './Button';
+import { useForm } from '../hooks/useForm';
+import { useStatus } from '../hooks/useStatus';
 
 interface props {
     password: string
+    onExit: () => void
 }
 
-export const ModalEncryptImg = ({password}: props) => {
+export const ModalEncryptImg = ({password, onExit}: props) => {
     const {
         name,
         pathFile,
@@ -21,8 +26,9 @@ export const ModalEncryptImg = ({password}: props) => {
         format: "",
     });
 
-    const [stateUniquePassword, setStateUniquePassword] = useState(false);
+    const { error, onNotError, setError, setStatus, status } = useStatus();
 
+    const [stateUniquePassword, setStateUniquePassword] = useState(false);
     const toggleStateUniquePassword = () => {
         let copyForm = {...formState};
         copyForm.uniquePassword = "";
@@ -49,82 +55,88 @@ export const ModalEncryptImg = ({password}: props) => {
         setFormState(copyForm);
     }
 
-    const onSaveDataEncrypt = async() => {
-        await window.electronAPI.encryptImg(pathFile, name, password, uniquePassword);
+    const onSaveDataEncrypt = async( event: React.FormEvent<HTMLFormElement> ) => {
+        event.preventDefault();
+
+        window.electronAPI.encryptImg(pathFile, name, password, uniquePassword)
+            
+        setStatus("done")
+        setTimeout(onExit, 300);
     }
 
-    // TODO AÑADIR FUNCION BUSCAR ARCHIVO CONEXION CON ELECTRON
-    // TODO AÑADIR FUNCION ENCRIPTAR CONEXION CON ELECTRON 
 
+    // RETURN
     return (
-        <div className="modal fade" id="encryptModal" tabIndex={-1} aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div className="modal-dialog">
-                <div className="modal-content">
-                    
-                    <div className="modal-header">
-                        <h1 className="modal-title fs-5" id="exampleModalLabel">Encriptar Imagen</h1>
-                        <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-
-                    <div className="modal-body">
-
-                        <label className="form-label">Ruta del archivo</label>
-                        <div className='d-flex gap-3'>
-                            <input 
-                                value={pathFile} 
-                                onChange={onInputChange} 
-                                name="pathFile"
-                                type="pathFile" 
-                                className="form-control" 
-                                placeholder="Ingrese la ruta de la imagen"
-                            />
-                        
-                            <button onClick={onGetRouteImg} className='btn btn-dark'>Buscar</button>
-                        </div>
-
-                        <label className="form-label mt-3">Nombre</label>
-                        <input 
-                            value={name} 
-                            onChange={onInputChange} 
-                            name="name"
-                            type="name" 
-                            className="form-control" 
-                            placeholder="Ingrese el nombre"
-                        />
-
-                        <div className='d-grid mt-3'>
-                            {
-                                !stateUniquePassword ?
-                                <button className='btn btn-danger' onClick={toggleStateUniquePassword}>Contraseña Especial ( opcional )</button> :
-                                <>
-                                    <label className="form-label">Contraseña especial</label>
-                                    <label className="form-label">Necesitaras esta contraseña para desencriptar esta imagen</label>
-                                    <div className='d-flex gap-3'>
-                                        <input 
-                                            value={uniquePassword} 
-                                            onChange={onInputChange} 
-                                            name="uniquePassword"
-                                            type="uniquePassword" 
-                                            className="form-control" 
-                                            placeholder="Ingrese la contraseña"
-                                        />
-                                    
-                                        <button onClick={toggleStateUniquePassword} className='btn btn-danger'>X</button>
-                                    </div>
-                                </>
-                            }
-                        </div>
+        <ModalParent
+            title='Encriptar Imagen'
+            advert={""}
+            onExit={onExit}
+            onSubmit={onSaveDataEncrypt}
+            buttons={[
+                {color: "primary", label: "Encriptar", submit: true, status},
+                {color: "secondary", label: "Rechazar", onClick: onExit}
+            ]}
+        >
 
 
-                    </div>
+            <div className="input-container text">
+                <label>Ruta del archivo</label>
 
-                    <div className="modal-footer">
-                        <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Rechazar</button>
-                        <button type="button" className="btn btn-primary" onClick={onSaveDataEncrypt}>Encriptar</button>
-                    </div>
+                <div style={{display: 'flex', gap: "0.8em"}}>
+                    <input 
+                        style={{width: "100%"}}
+                        name="pathFile" value={pathFile}
+                        onChange={onInputChange} autoFocus
+                        placeholder="Ingrese la ruta de la imagen"
+                    />
 
+                    <Button
+                        color='primary'
+                        label='Buscar'
+                        onClick={onGetRouteImg}
+                        style={{width: "4em", height: "43px"}}
+                    />
                 </div>
             </div>
-        </div>
+
+            <InputText
+                label='Nombre'
+                name='name' value={name}
+                placeholder='Ingrese el nombre'
+                onChange={onInputChange} autoFocus
+            />
+
+            {
+                stateUniquePassword ?
+                <div className="input-container text">
+                    <label>Contraña especial</label>
+
+                    <div style={{display: 'flex', gap: "0.8em"}}>
+                        <input 
+                            style={{width: "100%"}}
+                            name="pathFile" value={pathFile}
+                            onChange={onInputChange} autoFocus
+                            placeholder="Ingrese la contraseña especial"
+                        />
+
+                        <Button
+                            color='alert'
+                            label='X'
+                            onClick={toggleStateUniquePassword}
+                            style={{width: "43px", height: "43px"}}
+                        />
+                    </div>
+                </div>
+
+                : <Button
+                    color='alert'
+                    label='Contraseña especial ( opcional )'
+                    onClick={toggleStateUniquePassword}
+                    style={{width: "100%", padding: 0, marginTop: "0.5em"}}
+                />
+            }
+
+
+        </ModalParent>
     )
 }

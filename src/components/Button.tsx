@@ -1,7 +1,7 @@
 import "../styles/btn.scss";
 
 interface props {
-    color: "secondary" | "primary" | ""
+    color: "secondary" | "primary" | "alert" | ""
     disabled?: boolean
     label: string
     onClick?: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>, ...any: any) => void
@@ -23,6 +23,7 @@ export const Button = ({
         className={`btn 
             ${color === "primary" ? "primary" : ""}
             ${color === "secondary" ? "secondary" : ""}
+            ${color === "alert" ? "alert" : ""}
         `}
         disabled={disabled || !!status}
         onClick={onClick}
