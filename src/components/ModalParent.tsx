@@ -8,6 +8,7 @@ interface props {
     onExit?: () => void
     onSubmit?: (event: React.FormEvent<HTMLFormElement>) => void
     title: string
+    style?: React.CSSProperties
 }
 interface IButton {
     color: "secondary" | "primary" | ""
@@ -20,9 +21,9 @@ interface IButton {
 }
 
 
-export const ModalParent = ({ children, buttons, onExit, title, onSubmit, advert }:props) => (
+export const ModalParent = ({ children, buttons, onExit, title, onSubmit, advert, style }:props) => (
     <>
-        <div className="modal">
+        <div className="modal" style={style}>
             <div className="top">
                 <h1>{title}</h1>
                 {

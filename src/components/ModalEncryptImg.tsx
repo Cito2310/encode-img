@@ -55,11 +55,18 @@ export const ModalEncryptImg = ({password, onExit}: props) => {
         setFormState(copyForm);
     }
 
+    const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {onNotError(); onInputChange(event)}
+
     const onSaveDataEncrypt = async( event: React.FormEvent<HTMLFormElement> ) => {
         event.preventDefault();
 
+        // CHECK ERROR
+        if ( !name ) return setError("El nombre es necesario")
+        if ( !pathFile ) return setError("La ruta del archivo es necesario")
+        if ( !uniquePassword ) return setError("La contraseña unica es necesaria")
+
         window.electronAPI.encryptImg(pathFile, name, password, uniquePassword)
-            
+            // TODO añadir nuevo encrypt
         setStatus("done")
         setTimeout(onExit, 300);
     }
@@ -69,9 +76,10 @@ export const ModalEncryptImg = ({password, onExit}: props) => {
     return (
         <ModalParent
             title='Encriptar Imagen'
-            advert={""}
+            advert={error}
             onExit={onExit}
             onSubmit={onSaveDataEncrypt}
+            style={{width: "500px"}}
             buttons={[
                 {color: "primary", label: "Encriptar", submit: true, status},
                 {color: "secondary", label: "Rechazar", onClick: onExit}
@@ -86,7 +94,7 @@ export const ModalEncryptImg = ({password, onExit}: props) => {
                     <input 
                         style={{width: "100%"}}
                         name="pathFile" value={pathFile}
-                        onChange={onInputChange} autoFocus
+                        onChange={onChange} autoFocus
                         placeholder="Ingrese la ruta de la imagen"
                     />
 
@@ -103,7 +111,7 @@ export const ModalEncryptImg = ({password, onExit}: props) => {
                 label='Nombre'
                 name='name' value={name}
                 placeholder='Ingrese el nombre'
-                onChange={onInputChange} autoFocus
+                onChange={onChange} autoFocus
             />
 
             {
@@ -114,8 +122,8 @@ export const ModalEncryptImg = ({password, onExit}: props) => {
                     <div style={{display: 'flex', gap: "0.8em"}}>
                         <input 
                             style={{width: "100%"}}
-                            name="pathFile" value={pathFile}
-                            onChange={onInputChange} autoFocus
+                            name="uniquePassword" value={uniquePassword}
+                            onChange={onChange} autoFocus
                             placeholder="Ingrese la contraseña especial"
                         />
 
@@ -126,9 +134,9 @@ export const ModalEncryptImg = ({password, onExit}: props) => {
                             style={{width: "43px", height: "43px"}}
                         />
                     </div>
-                </div>
+                </div> :
 
-                : <Button
+                 <Button
                     color='alert'
                     label='Contraseña especial ( opcional )'
                     onClick={toggleStateUniquePassword}
