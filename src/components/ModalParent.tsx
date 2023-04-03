@@ -18,7 +18,7 @@ interface IButton {
 }
 
 
-export const Modal = ({ children, buttons, onExit, title }:props) => (
+export const ModalParent = ({ children, buttons, onExit, title }:props) => (
     <>
         <div className="modal">
             <div className="top">
