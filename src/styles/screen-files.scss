@@ -1,0 +1,48 @@
+.screen-files {
+    margin: 0 12em;
+    button { width: 7em }
+
+    .section-top {
+        align-items: center;
+        background-color: #7F56DA;
+        border-radius: 12px;
+        display: flex;
+        justify-content: space-between;
+        padding: 0.6em 2em;
+
+        h1 {
+            color: #fff;
+            font-family: Montserrat;
+            font-size: 2em;
+            font-weight: 600;
+        }
+    }
+
+    .list-files {
+        display: flex;
+        flex-direction: column;
+        gap: 0.8em;
+        margin-top: 1em;
+        padding: 0 2em;
+
+        li {
+            display: grid;
+            gap: 0.8em;
+            grid-template-columns: 1fr auto;
+            min-height: 37px;
+            
+            div {
+                align-items: center;
+                background-color: #eeeeee;
+                border-radius: 6px;
+                cursor: default;
+                display: flex;
+                font-size: 1.1em;
+                padding: 0 1em;
+                word-break: break-all;
+            }
+
+            button { height: 100%; }
+        }
+    }
+}

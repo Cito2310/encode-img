@@ -1,18 +1,14 @@
-import { ScreenInit } from './screen/ScreenInit';
-import { ScreenRegister } from './screen/ScreenRegister';
+import { useLayoutEffect, useState } from 'react';
+
 import { ScreenFiles } from './screen/ScreenFiles';
 
-import { ModalEncryptImg } from './components/ModalEncryptImg';
-import { ModalDecryptImg } from './components/ModalDecryptImg';
-
-import "./config.scss";
-import { useEffect, useLayoutEffect, useState } from 'react';
-import axios from 'axios';
-import { IObjectConfig } from '../types/objectConfig';
-import * as bcryptjs from 'bcryptjs';
-import { IObjectEncryptsNotCode } from '../types/objectEncrypts';
 import { ModalRegister } from './components/ModalRegister';
 import { ModalLogin } from './components/ModalLogin';
+
+import { IObjectConfig } from '../types/objectConfig';
+import { IObjectEncryptsNotCode } from '../types/objectEncrypts';
+
+import "./config.scss";
 
 
 function App() {
@@ -26,15 +22,7 @@ function App() {
   // // LOGIN ADD PASSWORD
   const [password, setPassword] = useState("");
 
-
-  // MODAL CONTROLLER
-  const [currentModal, setCurrentModal] = useState<"" | "encrypt" | "decrypt" >("");
-  const offModal = () => setCurrentModal("");
-
-
-  // SELECT FILE CONTROLLER
-  const [selectFile, setSelectFile] = useState({} as IObjectEncryptsNotCode);
-
+  // RETURN 
   return (
     <div className="App">
       {
@@ -42,14 +30,7 @@ function App() {
         
         (!password) ? <ModalLogin setPassword={setPassword}/> :
 
-        <>
-        
-
-
-
-          { currentModal === "encrypt" && <ModalEncryptImg password={password}/> }
-          { currentModal === "decrypt" && <ModalDecryptImg selectFile={selectFile} password={password}/> }
-        </>
+        <ScreenFiles password={password}/>
       }
       </div>
   );

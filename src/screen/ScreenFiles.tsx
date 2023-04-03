@@ -1,41 +1,59 @@
 import { useEffect, useState } from 'react';
 import { IObjectEncryptsNotCode } from '../../types/objectEncrypts';
 
+import "../styles/screen-files.scss"
+import { Button } from '../components/Button';
+import { ModalEncryptImg } from '../components/ModalEncryptImg';
+import { ModalDecryptImg } from '../components/ModalDecryptImg';
+
 interface props {
-    setSelectFile: React.Dispatch<React.SetStateAction<IObjectEncryptsNotCode>>
+    password: string
 }
 
-export const ScreenFiles = ({ setSelectFile }: props) => {
-
-    // OBTENER ELEMENTOS ENCRIPTADOS Y MOSTRARLO
+export const ScreenFiles = ({password}: props) => {
+    // GET ELEMENTS ENCRYPT
     const [encryptFiles, setEncryptFiles] = useState<IObjectEncryptsNotCode[]>([])
     useEffect(() => {window.electronAPI.getEncryptsImgs().then(setEncryptFiles)}, [])
     
+    // MODAL CONTROLLER
+    const [currentModal, setCurrentModal] = useState<"" | "encrypt" | "decrypt" >("");
+    const onExitModal = () => setCurrentModal("");
 
-    // TODO EL BOTON DESENCRIPTAR DEBE ENVIAR LA DATA AL MODAL DE DESENCRIPTADO
-    const onCallDesencrypt = ( file: IObjectEncryptsNotCode ) => {
-        setSelectFile(file)
-    }
+    const onEncryptModal = () => setCurrentModal("encrypt");
+    const onDecryptModal = ( file: IObjectEncryptsNotCode ) => { setSelectFile(file); setCurrentModal("decrypt") }
+
+    // SELECT FILE CONTROLLER
+    const [selectFile, setSelectFile] = useState({} as IObjectEncryptsNotCode);
     
-    return (
-        <div className="m-3">
-            <div className="d-flex justify-content-between align-items-center bg-dark text-white px-3 py-2 rounded mb-3">
-                <h1>Archivos</h1>
-                <button type="button" className="btn btn-light" data-bs-toggle="modal" data-bs-target="#encryptModal">
-                    ENCRIPTAR
-                </button>
-            </div>
 
-            <ul className="d-flex flex-column gap-2 px-3">
+    // RETURN
+    return (
+        <div className="screen-files">
+            <section className='section-top'>
+                <h1>Archivos</h1>
+
+                <Button
+                    color='secondary'
+                    label='ENCRIPTAR'
+                    onClick={onEncryptModal}
+                />
+            </section>
+
+            <ul className='list-files'>
                 {
-                    encryptFiles.map( fileData => <li key={fileData.name} className='d-flex justify-content-between align-items-center'>
-                        <h4>{ fileData.name }</h4>
-                        <button onClick={()=>{onCallDesencrypt(fileData)}} type="button" className="ms-3 btn btn-dark" data-bs-toggle="modal" data-bs-target="#decryptModal">
-                            Desencriptar
-                        </button>
+                    encryptFiles.map( fileData => <li key={fileData.name}>
+                        <div>{ fileData.name + fileData.extension }</div>
+                        <Button
+                            label='Desencriptar'
+                            color='primary'
+                            onClick={()=>onDecryptModal(fileData)}
+                        />
                     </li>)
                 }
             </ul>
+
+            {currentModal === "encrypt" && <ModalEncryptImg password={password}/>}
+            {currentModal === "decrypt" && <ModalDecryptImg password={password} selectFile={selectFile}/>}
         </div>
     )
 }
