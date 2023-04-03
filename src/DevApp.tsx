@@ -1,6 +1,6 @@
 import "./config.scss"
 import { Button } from "./components/Button"
-import { ModalExample } from "./components/ModalExample"
+import { ModalExample } from "./components/Modal"
 import { BtnIcon } from "./components/BtnIcon"
 
 export const DevApp = () => {
