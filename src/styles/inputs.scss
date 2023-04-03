@@ -1,0 +1,35 @@
+.input-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    
+    input {
+        border-radius: 8px;
+        border: 1px #dadbdf solid;
+        padding: 8px 10px;
+        transition: 
+            border 0.2s,
+            box-shadow 0.2s,
+        ;
+
+        &:focus {
+            border: 1px #dcceff solid;
+            box-shadow: 0px 0px 1px 1px #dcceff;
+        }
+    }
+
+    label {
+        margin-left: 5px;
+    }
+
+
+    ::-webkit-outer-spin-button,
+    ::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
+    // &.text {}
+    // &.number {}
+    &.select {select { &:focus { border-radius: 6px 6px 0 0 } }}
+}

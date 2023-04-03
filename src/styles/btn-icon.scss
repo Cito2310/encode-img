@@ -1,0 +1,44 @@
+.btn-icon {
+    align-items: center;
+    aspect-ratio: 1;
+    background-color: #FFFFFF;
+    border-color: #DADBDF;
+    border-radius: 6px;
+    border-style: solid;
+    border-width: 1px;
+    color: #38404D;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    width: 35px;
+
+
+    
+    transition: 
+        background-color 0.2s,
+        border-color 0.2s,
+        color 0.2s,
+    ;
+    &:disabled {cursor: default}
+
+    &:hover {   background-color:   #F2F2F2; 
+                border-color:       #dbdce0;    
+                color:              #38404D;           }
+
+    &:active {  background-color:   #eaecf0;
+                border-color:       #d8dbe2;    
+                color:              #040405;        }
+
+    &:disabled {    background-color:   #FFFFFF;
+                    border-color:       #DADBDF;    
+                    color:              #dad7d7;       }
+
+
+    .animationRotation360 {
+        animation: rotation360 infinite linear 1.6s;
+    }
+    @keyframes rotation360 {
+        0% { transform: rotate(0deg) }
+        100% { transform: rotate(360deg) }
+    }
+}
