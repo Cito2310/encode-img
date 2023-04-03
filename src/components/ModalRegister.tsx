@@ -1,24 +1,21 @@
-import * as bcryptjs from 'bcryptjs';
-import { useForm } from "../hooks/useForm"
+import { useForm } from "../hooks/useForm";
 import { useStatus } from "../hooks/useStatus";
+import { InputText } from "./Inputs";
 import { ModalParent } from "./ModalParent"
-import { InputText } from "./Inputs"
 
 interface props {
     setPassword: React.Dispatch<React.SetStateAction<string>>
 }
 
 
-export function ModalLogin({setPassword}: props) {
+export const ModalRegister = ({setPassword}: props) => {
     const { onNotError, error, setError, status, setStatus } = useStatus();
 
 
     // FORM CONTROLLER
     const {
         password,
-    
         onInputChange,
-        onResetForm
     } = useForm({
         password: ""
     });
@@ -31,15 +28,7 @@ export function ModalLogin({setPassword}: props) {
 
         if (!password) return setError("La contraseña es necesaria");
 
-        const data = await window.electronAPI.getConfig();
-        const comparePassword = bcryptjs.compareSync(password, data?.password || "");
-
-        if (!comparePassword) {
-            onResetForm();
-            setError("La contraseña es incorrecta");
-            return;
-        }
-
+        window.electronAPI.initProgram(password);
         setStatus("done");
         setPassword(password);
     }
@@ -50,9 +39,9 @@ export function ModalLogin({setPassword}: props) {
         <ModalParent
             advert={error}
             onSubmit={onSubmit}
-            title="Iniciar Sesion"
+            title="Registrarse"
             buttons={[
-                {color: "primary", label: "Aceptar", submit: true, status},
+                {color: "primary", label: "Aceptar", submit: true, status}
             ]}
         >
             <InputText

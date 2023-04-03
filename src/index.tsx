@@ -6,7 +6,7 @@ import { DevApp } from './DevApp';
 const root = ReactDOM.createRoot(document.getElementById('root')!);
 root.render(
   <React.StrictMode>
-    {/* <App /> */}
-    <DevApp/>
+    <App />
+    {/* <DevApp/> */}
   </React.StrictMode>
 );

@@ -11,6 +11,8 @@ import axios from 'axios';
 import { IObjectConfig } from '../types/objectConfig';
 import * as bcryptjs from 'bcryptjs';
 import { IObjectEncryptsNotCode } from '../types/objectEncrypts';
+import { ModalRegister } from './components/ModalRegister';
+import { ModalLogin } from './components/ModalLogin';
 
 
 function App() {
@@ -21,45 +23,35 @@ function App() {
     window.electronAPI.getConfig().then(data => { if (data) setConfig(data) })
   }, [])
 
-
-  // LOGIN ADD PASSWORD
+  // // LOGIN ADD PASSWORD
   const [password, setPassword] = useState("");
-  const [errorLogin, setErrorLogin] = useState("");
-
-  const onLogin = (event: React.FormEvent<HTMLFormElement>, newPassword: string) => {
-    event.preventDefault();
-
-    const comparePassword = bcryptjs.compareSync(newPassword, config.password);
-    if (comparePassword) return setPassword(newPassword);
-    setErrorLogin("Contraseña invalida");
-  }
-
-  // SELECT FILE
-  const [selectFile, setSelectFile] = useState<IObjectEncryptsNotCode>({} as IObjectEncryptsNotCode)
 
 
+  // MODAL CONTROLLER
+  const [currentModal, setCurrentModal] = useState<"" | "encrypt" | "decrypt" >("");
+  const offModal = () => setCurrentModal("");
+
+
+  // SELECT FILE CONTROLLER
+  const [selectFile, setSelectFile] = useState({} as IObjectEncryptsNotCode);
 
   return (
-    <div className="App bg-indigo">
-      <div className='container p-3'>
-        {
-          Object.keys(config).length === 0 ?
-            <ScreenInit setConfig={setConfig}/> 
-          :
-          <>
-            {
-              !password 
-              ? <ScreenRegister errorLogin={errorLogin} onLogin={onLogin}/>
-              : <ScreenFiles setSelectFile={setSelectFile}/>
-            }
-          </>
-        }
+    <div className="App">
+      {
+        (!config.password && !password) ? <ModalRegister setPassword={setPassword}/> : 
+        
+        (!password) ? <ModalLogin setPassword={setPassword}/> :
 
-        <ModalDecryptImg selectFile={selectFile} password={password}/>
-        <ModalEncryptImg password={password}/>
+        <>
+        
 
+
+
+          { currentModal === "encrypt" && <ModalEncryptImg password={password}/> }
+          { currentModal === "decrypt" && <ModalDecryptImg selectFile={selectFile} password={password}/> }
+        </>
+      }
       </div>
-    </div>
   );
 }
 
