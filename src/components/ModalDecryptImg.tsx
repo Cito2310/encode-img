@@ -1,11 +1,7 @@
-import { useState } from 'react';
-import { ModalParent } from './ModalParent';
-import { InputText } from './Inputs';
-import { Button } from './Button';
-import { useForm } from '../hooks/useForm';
-import { useStatus } from '../hooks/useStatus';
-import { IObjectEncrypt } from '../../types/objectEncrypts';
 import * as bcryptjs from 'bcryptjs';
+import { ModalParent, InputText } from './';
+import { useForm, useStatus } from '../hooks/';
+import { IObjectEncrypt } from '../../types/objectEncrypts';
 
 interface props {
     password: string
@@ -15,32 +11,29 @@ interface props {
 }
 
 export const ModalDecryptImg = ({password, selectFile, onExit, removeEncryptFile}: props) => {
+    // FORM CONTROLLER
     const {
         uniquePassword,
-
         onInputChange,
-        setFormState,
-        formState
     } = useForm({
         uniquePassword: "",
     });
+    
+    const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {onNotError(); onInputChange(event)};
 
-    const { specialPassword, password: passwordFile } = selectFile;
-
+    // USE STATUS
     const { error, onNotError, setError, setStatus, status } = useStatus();
 
-    const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {onNotError(); onInputChange(event)}
-
-
-    const onDescrypt = async(event: React.FormEvent<HTMLFormElement>) => {
+    // FUNCTION ONDECRYPT | for send orden desencrypt and remove encrypt element
+    const onDecrypt = async(event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault()
 
         let copyPassword = password;
 
         if (uniquePassword) {
-            if (specialPassword && !uniquePassword) return setError("La contraseña unica es necesaria");
+            if (selectFile.specialPassword && !uniquePassword) return setError("La contraseña unica es necesaria");
             
-            const compareUniquePassword = bcryptjs.compareSync(uniquePassword, passwordFile);
+            const compareUniquePassword = bcryptjs.compareSync(uniquePassword, selectFile.password);
             if (!compareUniquePassword) return setError("La contraseña es incorrecta");
     
             copyPassword = uniquePassword;
@@ -48,8 +41,7 @@ export const ModalDecryptImg = ({password, selectFile, onExit, removeEncryptFile
 
         await window.electronAPI.desencryptImg(selectFile.name, copyPassword);
         setStatus("done")
-        setTimeout(onExit, 300);
-        setTimeout(()=>removeEncryptFile(selectFile), 300);
+        setTimeout(()=>{removeEncryptFile(selectFile); onExit()}, 300);
     }
 
 
@@ -59,7 +51,7 @@ export const ModalDecryptImg = ({password, selectFile, onExit, removeEncryptFile
             title='Desencriptar Imagen'
             advert={error}
             onExit={onExit}
-            onSubmit={onDescrypt}
+            onSubmit={onDecrypt}
             buttons={[
                 {color: "primary", label: "Desencriptar", submit: true, status},
                 {color: "secondary", label: "Rechazar", onClick: onExit}
@@ -67,7 +59,7 @@ export const ModalDecryptImg = ({password, selectFile, onExit, removeEncryptFile
         >
             <>
                 {
-                    specialPassword ?
+                    selectFile.specialPassword ?
                         <InputText
                             label='Contraseña Unica'
                             name='uniquePassword' value={uniquePassword}

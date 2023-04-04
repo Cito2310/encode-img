@@ -1,8 +1,6 @@
 import * as bcryptjs from 'bcryptjs';
-import { useForm } from "../hooks/useForm"
-import { useStatus } from "../hooks/useStatus";
-import { ModalParent } from "./ModalParent"
-import { InputText } from "./Inputs"
+import { useForm, useStatus } from "../hooks/";
+import { ModalParent, InputText } from "./";
 
 interface props {
     setPassword: React.Dispatch<React.SetStateAction<string>>
@@ -10,6 +8,7 @@ interface props {
 
 
 export function ModalLogin({setPassword}: props) {
+    // USE STATUS
     const { onNotError, error, setError, status, setStatus } = useStatus();
 
 

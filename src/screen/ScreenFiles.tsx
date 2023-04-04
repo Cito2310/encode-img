@@ -1,10 +1,6 @@
 import { useEffect, useState } from 'react';
 import { IObjectEncrypt } from '../../types/objectEncrypts';
-
-import { Button } from '../components/Button';
-import { ModalEncryptImg } from '../components/ModalEncryptImg';
-import { ModalDecryptImg } from '../components/ModalDecryptImg';
-
+import { Button, ModalEncryptImg, ModalDecryptImg } from '../components/';
 import "../styles/screen-files.scss"
 
 interface props {
@@ -25,6 +21,7 @@ export const ScreenFiles = ({password}: props) => {
         setEncryptFiles(newEncryptFiles);
     }
     
+
     // MODAL CONTROLLER
     const [currentModal, setCurrentModal] = useState<"" | "encrypt" | "decrypt" >("");
     const onExitModal = () => setCurrentModal("");
@@ -32,6 +29,7 @@ export const ScreenFiles = ({password}: props) => {
     const onEncryptModal = () => setCurrentModal("encrypt");
     const onDecryptModal = ( file: IObjectEncrypt ) => { setSelectFile(file); setCurrentModal("decrypt") }
 
+    
     // SELECT FILE CONTROLLER
     const [selectFile, setSelectFile] = useState({} as IObjectEncrypt);
     

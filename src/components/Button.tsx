@@ -15,9 +15,9 @@ export const Button = ({
     disabled,
     label,
     onClick,
+    status,
     style,
     submit,
-    status,
 }: props) => (
     <button
         className={`btn 

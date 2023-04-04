@@ -1,9 +1,6 @@
 import { useState } from 'react';
-import { ModalParent } from './ModalParent';
-import { InputText } from './Inputs';
-import { Button } from './Button';
-import { useForm } from '../hooks/useForm';
-import { useStatus } from '../hooks/useStatus';
+import { ModalParent, InputText, Button } from './';
+import { useForm, useStatus } from '../hooks/';
 import { IObjectEncrypt } from '../../types/objectEncrypts';
 
 interface props {
@@ -13,6 +10,7 @@ interface props {
 }
 
 export const ModalEncryptImg = ({password, onExit, addNewEncryptFile}: props) => {
+    // FORM CONTROLLER
     const {
         name,
         pathFile,
@@ -28,26 +26,16 @@ export const ModalEncryptImg = ({password, onExit, addNewEncryptFile}: props) =>
         format: "",
     });
 
-    const { error, onNotError, setError, setStatus, status } = useStatus();
+    const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {onNotError(); onInputChange(event)}
 
-    const [stateUniquePassword, setStateUniquePassword] = useState(false);
-    const toggleStateUniquePassword = () => {
-        let copyForm = {...formState};
-        copyForm.uniquePassword = "";
-        setFormState(copyForm);
-        setStateUniquePassword(!stateUniquePassword);
-    }
-
+    // func get route img
     const onGetRouteImg = async() => {
         const pathImg = await window.electronAPI.getRouteImg();
         if (!pathImg) return;
 
         const splitPath = pathImg.split("\\");
 
-        let nameFile = splitPath[splitPath.length-1];
-        nameFile = nameFile.split(".")[0];
-        nameFile = nameFile.replace(/[-" +"]/g, "_")
-
+        const nameFile = splitPath[splitPath.length-1].split(".")[0].replace(/[-" +"]/g, "_");
         const formatFile = nameFile.split(".")[1];
 
         let copyForm = {...formState};
@@ -57,8 +45,21 @@ export const ModalEncryptImg = ({password, onExit, addNewEncryptFile}: props) =>
         setFormState(copyForm);
     }
 
-    const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {onNotError(); onInputChange(event)}
+    // USE STATUS
+    const { error, onNotError, setError, setStatus, status } = useStatus();
 
+
+    // UNIQUE PASSWORD CONTROLLER
+    const [stateUniquePassword, setStateUniquePassword] = useState(false);
+    const toggleStateUniquePassword = () => {
+        let copyForm = {...formState};
+        copyForm.uniquePassword = "";
+        setFormState(copyForm);
+        setStateUniquePassword(!stateUniquePassword);
+    }
+
+
+    // FUNCTION SAVE DATA ENCRYPT
     const onSaveDataEncrypt = async( event: React.FormEvent<HTMLFormElement> ) => {
         event.preventDefault();
 
@@ -69,7 +70,6 @@ export const ModalEncryptImg = ({password, onExit, addNewEncryptFile}: props) =>
 
         const data = await window.electronAPI.encryptImg(pathFile, name, password, uniquePassword)
         addNewEncryptFile(data);
-            // TODO añadir nuevo encrypt
         setStatus("done")
         setTimeout(onExit, 300);
     }

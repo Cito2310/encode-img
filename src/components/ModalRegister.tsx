@@ -1,7 +1,5 @@
-import { useForm } from "../hooks/useForm";
-import { useStatus } from "../hooks/useStatus";
-import { InputText } from "./Inputs";
-import { ModalParent } from "./ModalParent"
+import { useForm, useStatus } from "../hooks/";
+import { InputText, ModalParent } from "./";
 
 interface props {
     setPassword: React.Dispatch<React.SetStateAction<string>>
@@ -9,9 +7,10 @@ interface props {
 
 
 export const ModalRegister = ({setPassword}: props) => {
+    // USE STATUS
     const { onNotError, error, setError, status, setStatus } = useStatus();
 
-
+    
     // FORM CONTROLLER
     const {
         password,

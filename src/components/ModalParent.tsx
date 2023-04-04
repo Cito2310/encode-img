@@ -1,5 +1,5 @@
+import { Button } from "./"
 import "../styles/modal.scss"
-import { Button } from "./Button"
 
 interface props {
     buttons?: IButton[]

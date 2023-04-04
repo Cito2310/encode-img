@@ -2,8 +2,7 @@ import { useLayoutEffect, useState } from 'react';
 
 import { ScreenFiles } from './screen/ScreenFiles';
 
-import { ModalRegister } from './components/ModalRegister';
-import { ModalLogin } from './components/ModalLogin';
+import { ModalRegister, ModalLogin } from './components/';
 
 import { IObjectConfig } from '../types/objectConfig';
 
