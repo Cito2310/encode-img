@@ -4,13 +4,15 @@ import { InputText } from './Inputs';
 import { Button } from './Button';
 import { useForm } from '../hooks/useForm';
 import { useStatus } from '../hooks/useStatus';
+import { IObjectEncrypt } from '../../types/objectEncrypts';
 
 interface props {
     password: string
     onExit: () => void
+    addNewEncryptFile: (file: IObjectEncrypt) => void
 }
 
-export const ModalEncryptImg = ({password, onExit}: props) => {
+export const ModalEncryptImg = ({password, onExit, addNewEncryptFile}: props) => {
     const {
         name,
         pathFile,
@@ -63,9 +65,10 @@ export const ModalEncryptImg = ({password, onExit}: props) => {
         // CHECK ERROR
         if ( !name ) return setError("El nombre es necesario")
         if ( !pathFile ) return setError("La ruta del archivo es necesario")
-        if ( !uniquePassword ) return setError("La contraseña unica es necesaria")
+        if ( stateUniquePassword && !uniquePassword ) return setError("La contraseña unica es necesaria")
 
-        window.electronAPI.encryptImg(pathFile, name, password, uniquePassword)
+        const data = await window.electronAPI.encryptImg(pathFile, name, password, uniquePassword)
+        addNewEncryptFile(data);
             // TODO añadir nuevo encrypt
         setStatus("done")
         setTimeout(onExit, 300);

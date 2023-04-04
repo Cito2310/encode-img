@@ -2,13 +2,14 @@ import { dialog, ipcMain } from 'electron';
 import * as bcryptjs from "bcryptjs";
 
 import { ipcNames } from '../types/ipcNames';
-import { mkdirSync, writeFileSync, readFileSync, readdir, readdirSync, write } from 'fs';
+import { mkdirSync, writeFileSync, readFileSync, readdir, readdirSync, write, unlinkSync } from 'fs';
 import { IObjectConfig } from '../types/objectConfig';
 import * as path from 'path';
 import * as hmacSHA1 from "crypto-js/hmac-sha1";
 import { existsSync } from 'fs';
 import * as crypto from "crypto-js";
-import { IObjectEncryptsNotCode, IObjectEncrypts } from '../types/objectEncrypts';
+import { IObjectEncryptWithCode, IObjectEncrypt } from '../types/objectEncrypts';
+import { v4 as uuidv4 } from 'uuid';
 
 export const ipConnection = () => {
     ipcMain.handle("getRouteImg" as ipcNames, async(e, args): Promise<string | undefined> =>{
@@ -48,22 +49,23 @@ export const ipConnection = () => {
 
 
     // FUNCTION ENCRYPT AND DESCRYPT
-    ipcMain.handle("getEncryptsImgs" as ipcNames, async(e, args ): Promise<IObjectEncryptsNotCode[]> =>{
+    ipcMain.handle("getEncryptsImgs" as ipcNames, async(e, args ): Promise<IObjectEncrypt[]> =>{
         const files = readdirSync("./data/encode");
 
-        const rawData: IObjectEncrypts[] = files.map( value => JSON.parse(readFileSync(`./data/encode/${value}`, "utf-8")));
+        const rawData: IObjectEncryptWithCode[] = files.map( value => JSON.parse(readFileSync(`./data/encode/${value}`, "utf-8")));
 
         const dataWithNotCode = rawData.map( value => ({
             extension: value.extension,
+            id: value.id,
             name: value.name,
             password: value.password,
-            specialPassword: value.specialPassword
+            specialPassword: value.specialPassword,
         }))
 
         return dataWithNotCode;
     })
 
-    ipcMain.on("encryptImg" as ipcNames, async(e, args ): Promise<void> =>{
+    ipcMain.handle("encryptImg" as ipcNames, async(e, args ): Promise<IObjectEncrypt> =>{
         const { name, route,  password, specialPassword } = args as { route: string, name: string, password: string, specialPassword?: string };
 
         // GET BASIC DATA
@@ -88,24 +90,26 @@ export const ipConnection = () => {
 
         // object encode
         const objectEncode = {
-            name: copyName,
             code: encryptBase64,
+            extension: extension,
+            id: uuidv4(),
+            name: copyName,
             password: encryptPassword,
             specialPassword: passwordToEncrypt !== password ? true : false,
-            extension: extension,
         }
-
 
         // CREATE OBJECT ENCODE
         if (!existsSync("./data/encode")) mkdirSync("./data/encode", {recursive: true});
 
         writeFileSync(`./data/encode/${copyName}.json`, JSON.stringify(objectEncode));
+
+        return {name, id: objectEncode.id, extension, password: encryptPassword, specialPassword: objectEncode.specialPassword}
     })
 
-    ipcMain.on("desencryptImg" as ipcNames, async(e, args): Promise<void> => {
+    ipcMain.handle("desencryptImg" as ipcNames, async(e, args): Promise<void> => {
         const {name: inputName, password: inputPassword}: {name: string, password: string} = args;
 
-        const { code, extension, name, password, specialPassword }: IObjectEncrypts = JSON.parse(readFileSync(`./data/encode/${inputName}.json`, "utf8"))
+        const { code, extension, name, password, specialPassword }: IObjectEncryptWithCode = JSON.parse(readFileSync(`./data/encode/${inputName}.json`, "utf8"))
 
         const passwordValidate = bcryptjs.compareSync(inputPassword, password);
         if (!passwordValidate) throw new Error("password invalid");
@@ -116,6 +120,7 @@ export const ipConnection = () => {
 
         const routeSave = dialog.showOpenDialogSync({ properties:["openDirectory", "createDirectory"] });
 
+        unlinkSync(`./data/encode/${inputName}.json`)
         writeFileSync(`${routeSave}/${name+extension}`, dataDescrypt, "base64");
     })
 }

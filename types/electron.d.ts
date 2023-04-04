@@ -8,8 +8,8 @@ declare global {
             initProgram: (password: string) => Promise<IObjectConfig>
             getConfig: () => Promise<undefined | IObjectConfig >
             
-            getEncryptsImgs: () => Promise<IObjectEncryptsNotCode[]>
-            encryptImg: (route: string, name: string, password: string, specialPassword?: string) => Promise<void>
+            getEncryptsImgs: () => Promise<IObjectEncrypts[]>
+            encryptImg: (route: string, name: string, password: string, specialPassword?: string) => Promise<IObjectEncrypts>
             desencryptImg: ( name: string, password: string ) => Promise<void>
         }
     }

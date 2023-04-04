@@ -3,7 +3,7 @@ import { Button } from "./Button"
 
 interface props {
     buttons?: IButton[]
-    children: JSX.Element | JSX.Element[]
+    children?: JSX.Element | JSX.Element[]
     advert?: string
     onExit?: () => void
     onSubmit?: (event: React.FormEvent<HTMLFormElement>) => void

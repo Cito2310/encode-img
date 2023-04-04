@@ -1,67 +1,82 @@
-import { useForm } from '../hooks/useForm';
 import { useState } from 'react';
-import { IObjectEncryptsNotCode } from '../../types/objectEncrypts';
-
+import { ModalParent } from './ModalParent';
+import { InputText } from './Inputs';
+import { Button } from './Button';
+import { useForm } from '../hooks/useForm';
+import { useStatus } from '../hooks/useStatus';
+import { IObjectEncrypt } from '../../types/objectEncrypts';
+import * as bcryptjs from 'bcryptjs';
 
 interface props {
     password: string
-    selectFile: IObjectEncryptsNotCode
+    selectFile: IObjectEncrypt
+    onExit: () => void
+    removeEncryptFile: (file: IObjectEncrypt) => void
 }
 
-export const ModalDecryptImg = ({ password, selectFile }:props) => {
+export const ModalDecryptImg = ({password, selectFile, onExit, removeEncryptFile}: props) => {
     const {
         uniquePassword,
 
-        onInputChange
+        onInputChange,
+        setFormState,
+        formState
     } = useForm({
         uniquePassword: "",
     });
 
-    const onDescrypt = () => {
-        window.electronAPI.desencryptImg(selectFile.name, password);
+    const { specialPassword, password: passwordFile } = selectFile;
+
+    const { error, onNotError, setError, setStatus, status } = useStatus();
+
+    const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {onNotError(); onInputChange(event)}
+
+
+    const onDescrypt = async(event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault()
+
+        let copyPassword = password;
+
+        if (uniquePassword) {
+            if (specialPassword && !uniquePassword) return setError("La contraseña unica es necesaria");
+            
+            const compareUniquePassword = bcryptjs.compareSync(uniquePassword, passwordFile);
+            if (!compareUniquePassword) return setError("La contraseña es incorrecta");
+    
+            copyPassword = uniquePassword;
+        }
+
+        await window.electronAPI.desencryptImg(selectFile.name, copyPassword);
+        setStatus("done")
+        setTimeout(onExit, 300);
+        setTimeout(()=>removeEncryptFile(selectFile), 300);
     }
 
+
+    // RETURN
     return (
-        <div className="modal fade" id="decryptModal" tabIndex={-1} aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div className="modal-dialog">
-                <div className="modal-content">
-                    <div className="modal-header">
-                        <h1 className="modal-title fs-5" id="exampleModalLabel">Desencriptar Imagen</h1>
-                        <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div className="modal-body">
-
-
-                        <div className='container'>
-                            <p>Seguro que deseas desencriptar este archivo</p>
-                            <p>{selectFile.name+selectFile.extension}</p>
-                            {
-                                selectFile.specialPassword ?
-                                <>
-                                    <label className="form-label">Contraseña especial</label>
-                                    <div className='d-flex gap-3'>
-                                        <input 
-                                            value={uniquePassword} 
-                                            onChange={onInputChange} 
-                                            name="uniquePassword"
-                                            type="uniquePassword" 
-                                            className="form-control" 
-                                            placeholder="Ingrese la contraseña"
-                                        />
-                                    </div>
-                                </>
-                                : null
-                            }
-                        </div>
-
-
-                    </div>
-                    <div className="modal-footer">
-                        <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Rechazar</button>
-                        <button onClick={onDescrypt} disabled={!selectFile.specialPassword || !uniquePassword.trim() ? false : true} type="button" className="btn btn-primary">Encriptar</button>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <ModalParent
+            title='Desencriptar Imagen'
+            advert={error}
+            onExit={onExit}
+            onSubmit={onDescrypt}
+            buttons={[
+                {color: "primary", label: "Desencriptar", submit: true, status},
+                {color: "secondary", label: "Rechazar", onClick: onExit}
+            ]}
+        >
+            <>
+                {
+                    specialPassword ?
+                        <InputText
+                            label='Contraseña Unica'
+                            name='uniquePassword' value={uniquePassword}
+                            placeholder='Ingrese la contraseña unica'
+                            onChange={onChange} autoFocus
+                        /> : undefined
+                }
+                <p>Seguro que deseas desencriptar este elemento?</p>
+            </>
+        </ModalParent>
     )
 }

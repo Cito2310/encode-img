@@ -6,7 +6,6 @@ import { ModalRegister } from './components/ModalRegister';
 import { ModalLogin } from './components/ModalLogin';
 
 import { IObjectConfig } from '../types/objectConfig';
-import { IObjectEncryptsNotCode } from '../types/objectEncrypts';
 
 import "./config.scss";
 

@@ -9,6 +9,6 @@ contextBridge.exposeInMainWorld('electronAPI', {
 
     // FUNCTION ENCRYPT AND DESCRYPT
     getEncryptsImgs: () => ipcRenderer.invoke("getEncryptsImgs" as ipcNames),
-    encryptImg: (route: string, name: string, password: string, specialPassword?: string) => ipcRenderer.send('encryptImg' as ipcNames, { route, name, password, specialPassword }),
-    desencryptImg: (name: string, password: string) => ipcRenderer.send('desencryptImg' as ipcNames, { name, password }),
+    encryptImg: (route: string, name: string, password: string, specialPassword?: string) => ipcRenderer.invoke('encryptImg' as ipcNames, { route, name, password, specialPassword }),
+    desencryptImg: (name: string, password: string) => ipcRenderer.invoke('desencryptImg' as ipcNames, { name, password }),
 })

@@ -1,14 +1,12 @@
-export interface IObjectEncrypts {
+
+export interface IObjectEncrypt {
+    extension: string,  
+    id: string,
     name: string,
-    code: string,
     password: string,
     specialPassword: boolean,
-    extension: string,
 }
 
-export interface IObjectEncryptsNotCode {
-    name: string,
-    password: string,
-    specialPassword: boolean,
-    extension: string,  
+export interface IObjectEncryptWithCode extends IObjectEncrypt {
+    code: string,
 }
