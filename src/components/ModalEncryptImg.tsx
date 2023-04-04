@@ -82,7 +82,6 @@ export const ModalEncryptImg = ({password, onExit, addNewEncryptFile}: props) =>
             advert={error}
             onExit={onExit}
             onSubmit={onSaveDataEncrypt}
-            style={{width: "500px"}}
             buttons={[
                 {color: "primary", label: "Encriptar", submit: true, status},
                 {color: "secondary", label: "Rechazar", onClick: onExit}
@@ -120,14 +119,13 @@ export const ModalEncryptImg = ({password, onExit, addNewEncryptFile}: props) =>
             {
                 stateUniquePassword ?
                 <div className="input-container text">
-                    <label>Contraña especial</label>
+                    <label>Contraña unica</label>
 
                     <div style={{display: 'flex', gap: "0.8em"}}>
-                        <input 
-                            style={{width: "100%"}}
-                            name="uniquePassword" value={uniquePassword}
-                            onChange={onChange} autoFocus
-                            placeholder="Ingrese la contraseña especial"
+                        <InputText
+                            name='uniquePassword' value={uniquePassword}
+                            onChange={onChange} autoFocus password
+                            placeholder="Ingrese la contraseña unica"
                         />
 
                         <Button
@@ -141,7 +139,7 @@ export const ModalEncryptImg = ({password, onExit, addNewEncryptFile}: props) =>
 
                  <Button
                     color='alert'
-                    label='Contraseña especial ( opcional )'
+                    label='Contraseña unica ( opcional )'
                     onClick={toggleStateUniquePassword}
                     style={{width: "100%", padding: 0, marginTop: "0.5em"}}
                 />

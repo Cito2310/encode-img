@@ -64,7 +64,7 @@ export const ModalDecryptImg = ({password, selectFile, onExit, removeEncryptFile
                             label='Contraseña Unica'
                             name='uniquePassword' value={uniquePassword}
                             placeholder='Ingrese la contraseña unica'
-                            onChange={onChange} autoFocus
+                            onChange={onChange} autoFocus password
                         /> : undefined
                 }
                 <p>Seguro que deseas desencriptar este elemento?</p>
