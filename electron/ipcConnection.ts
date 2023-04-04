@@ -1,15 +1,13 @@
 import { dialog, ipcMain } from 'electron';
+import { mkdirSync, writeFileSync, readFileSync, readdirSync, unlinkSync, existsSync } from 'fs';
+import { v4 as uuidv4 } from 'uuid';
 import * as bcryptjs from "bcryptjs";
+import * as crypto from "crypto-js";
+import * as path from 'path';
 
 import { ipcNames } from '../types/ipcNames';
-import { mkdirSync, writeFileSync, readFileSync, readdir, readdirSync, write, unlinkSync } from 'fs';
 import { IObjectConfig } from '../types/objectConfig';
-import * as path from 'path';
-import * as hmacSHA1 from "crypto-js/hmac-sha1";
-import { existsSync } from 'fs';
-import * as crypto from "crypto-js";
 import { IObjectEncryptWithCode, IObjectEncrypt } from '../types/objectEncrypts';
-import { v4 as uuidv4 } from 'uuid';
 
 export const ipConnection = () => {
     ipcMain.handle("getRouteImg" as ipcNames, async(e, args): Promise<string | undefined> =>{
