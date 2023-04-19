@@ -10,7 +10,8 @@ function createWindow() {
     webPreferences: {
       // contextIsolation: false,
       preload: path.join(__dirname, 'preload.js')
-    }
+    },
+    icon:'icon.png',
   })
 
   if (app.isPackaged) {
